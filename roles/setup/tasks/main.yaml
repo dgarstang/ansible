@@ -1,0 +1,10 @@
+- name: Install lm-sensors
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ base_packages }}"
+
+- name: debug
+  debug:
+    msg: "HERE"
+
