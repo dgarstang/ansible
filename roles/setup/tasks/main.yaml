@@ -4,11 +4,7 @@
     state: present
   loop: "{{ base_packages }}"
 
-- name: debug
-  debug:
-    msg: "HERE"
-
-- name: Copy file with owner and permissions
+- name: Install pi4 temperature checking script
   ansible.builtin.copy:
     src: files/check_temp.py
     dest: /usr/local/bin
@@ -16,12 +12,8 @@
     group: root
     mode: '0755'
 
-- name: Ensure a job that runs at 2 and 5 exists. Creates an entry like "0 5,2 * * ls -alh > /dev/null"
+- name: Install cron job to run pi4 check temperature script
   ansible.builtin.cron:
     name: "Check CPU temperature"
     minute: "0/1"
-    job: "$PATH:/usr/local/bin /usr/local/bin/check_temp.py"
-
-- copy:
-    content: "{{ testenc }}"
-    dest: "/tmp/testenc"
+    job: "$PATH:/usr/local/bin /usr/local/bin/check_temp.py -u {{ smtp_user }} -p {{ smtp_password }} -r {{ smtp_user }}"
