@@ -1,2 +1,4 @@
 base_packages:
   - lm-sensors
+  - curl
+testenc: Foo
