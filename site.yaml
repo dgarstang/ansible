@@ -3,4 +3,9 @@
   become: true
   connection: ssh
   roles:
-    - role: setup
+    - role: common
+
+- hosts: mgmt
+  become: true
+  roles:
+    - role: monitoring 
