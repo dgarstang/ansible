@@ -5,7 +5,8 @@
   roles:
     - role: common
 
-- hosts: mgmt
-  become: true
-  roles:
-    - role: monitoring 
+#- hosts: mgmt
+  #become: true
+  #roles:
+    #- role: monitoring 
+    #- role: packer
