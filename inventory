@@ -5,3 +5,12 @@ node4
 
 [mgmt]
 node0
+
+[k3s_master]
+node1
+
+[k3s_node]
+node1
+node2
+node3
+node4

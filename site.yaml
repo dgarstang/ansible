@@ -5,6 +5,18 @@
   roles:
     - role: common
 
+- hosts: k3s_master
+  become: true
+  connection: ssh
+  roles:
+    - role: k3s/master
+
+- hosts: k3s_node
+  become: true
+  connection: ssh
+  roles:
+    - role: k3s/node
+
 #- hosts: mgmt
   #become: true
   #roles:

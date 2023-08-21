@@ -24,7 +24,7 @@
     state: present
   loop: "{{ monitoring_packages }}"
 
-- name: Download grafana repository key
+- name: Grafana repository key
   ansible.builtin.get_url:
     url: https://apt.grafana.com/gpg.key
     dest: /usr/share/keyrings/grafana.key
