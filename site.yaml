@@ -4,12 +4,15 @@
   connection: ssh
   roles:
     - role: common
+    - role: grafana
 
 - hosts: k3s_master
   become: true
   connection: ssh
   roles:
     - role: k3s/master
+      tags:
+        - k3s_master
 
 - hosts: k3s_node
   become: true

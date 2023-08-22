@@ -1,0 +1,71 @@
+- name: Download k3s binary arm64
+  get_url:
+    url: https://github.com/k3s-io/k3s/releases/download/v1.27.4+k3s1/k3s-arm64
+    checksum: sha256:https://github.com/k3s-io/k3s/releases/download/v1.27.4+k3s1/sha256sum-arm64.txt
+    dest: /usr/local/bin/k3s
+    owner: root
+    group: root
+    mode: 0755
+  when:
+    - ( ansible_facts.architecture is search("arm") and
+        ansible_facts.userspace_bits == "64" ) or
+      ansible_facts.architecture is search("aarch64")
+
+- name: Activating cgroup support
+  lineinfile:
+    path: /boot/cmdline.txt
+    regexp: '^((?!.*\bcgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory\b).*)$'
+    line: '\1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory'
+    backrefs: true
+  #notify: reboot
+
+- name: Copy K3s service file
+  template:
+    src: "k3s.service.j2"
+    dest: "/etc/systemd/system/k3s-node.service"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Enable and check K3s service
+  systemd:
+    name: k3s-node
+    daemon_reload: yes
+    state: restarted
+    enabled: yes
+
+- name: Wait for node-token
+  wait_for:
+    path: "{{ k3s_server_location }}/server/node-token"
+
+- name: Register node-token file access mode
+  stat:
+    path: "{{ k3s_server_location }}/server/node-token"
+  register: p
+
+- name: Change file access node-token
+  file:
+    path: "{{ k3s_server_location }}/server/node-token"
+    mode: "g+rx,o+rx"
+
+- name: Read node-token from master
+  slurp:
+    path: "{{ k3s_server_location }}/server/node-token"
+  register: node_token
+
+- name: Store Master node-token
+  set_fact:
+    token: "{{ node_token.content | b64decode | regex_replace('\n', '') }}"
+
+- name: Restore node-token file access
+  file:
+    path: "{{ k3s_server_location }}/server/node-token"
+    mode: "{{ p.stat.mode }}"
+
+- name: Create directory .kube
+  file:
+    path: ~{{ ansible_user }}/.kube
+    state: directory
+    owner: "{{ ansible_user }}"
+    mode: "u=rwx,g=rx,o="
+

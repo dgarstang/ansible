@@ -18,28 +18,6 @@
     minute: "0/1"
     job: "$PATH:/usr/local/bin /usr/local/bin/check_temp.py -u {{ smtp_user }} -p {{ smtp_password }} -r {{ smtp_user }}"
 
-- name: Install monitoring packages
-  ansible.builtin.package:
-    name: "{{ item }}"
-    state: present
-  loop: "{{ monitoring_packages }}"
-
-- name: Grafana repository key
-  ansible.builtin.get_url:
-    url: https://apt.grafana.com/gpg.key
-    dest: /usr/share/keyrings/grafana.key
-    mode: '0644'
-
-- name: grafana | apt source
-  ansible.builtin.apt_repository:
-    repo: "deb [signed-by=/usr/share/keyrings/grafana.key] https://apt.grafana.com stable main"
-    state: present
-
-- name: Install grafana agent
-  ansible.builtin.package:
-    name: grafana-agent
-    state: present
-
 - name: Update /etc/hosts file
   lineinfile:
     path: /etc/hosts
