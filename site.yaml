@@ -4,6 +4,7 @@
   connection: ssh
   roles:
     - role: common
+    - role: raspberry_pi
     - role: grafana
 
 - hosts: k3s_master
