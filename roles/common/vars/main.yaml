@@ -1,4 +1,8 @@
+---
 base_packages:
   - lm-sensors
   - curl
   - wget
+mac_to_hostname:
+  d83add439271: node0
+  d83add2367f4: node3

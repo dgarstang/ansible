@@ -1,3 +1,17 @@
+- name: Get MAC address of the host
+  command: "cat /sys/class/net/wlan0/address"
+  register: mac_address_raw
+  changed_when: false
+
+- name: Convert MAC address to uppercase and remove colons
+  set_fact:
+    mac_address: "{{ mac_address_raw.stdout | regex_replace(':', '') }}"
+
+- name: Set hostname based on MAC address
+  hostname:
+    name: "{{ mac_to_hostname[mac_address] }}"
+  when: mac_to_hostname[mac_address] is defined
+
 - name: Install base packages
   ansible.builtin.package:
     name: "{{ item }}"

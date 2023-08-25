@@ -1,6 +1,10 @@
+- name: Debug
+  ansible.builtin.debug:
+    msg: "-u {{ smtp_user }} -p {{ smtp_password }} -r {{ smtp_user }}"
+
 - name: Deploy  boot config file
   template:
-    src: "config.txt.j2"
+    src: "templates/config.txt.j2"
     dest: "/boot/config.txt"
     owner: root
     group: root
