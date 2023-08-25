@@ -1,7 +1,3 @@
-- name: Debug
-  ansible.builtin.debug:
-    msg: "-u {{ smtp_user }} -p {{ smtp_password }} -r {{ smtp_user }}"
-
 - name: Deploy  boot config file
   template:
     src: "templates/config.txt.j2"
@@ -23,3 +19,40 @@
     name: "Check CPU temperature"
     minute: "0/1"
     job: "$PATH:/usr/local/bin /usr/local/bin/check_temp.py -u {{ smtp_user }} -p {{ smtp_password }} -r {{ smtp_user }}"
+
+- name: Create mount point directory
+  file:
+    path: /mnt/rpi_pinn
+    state: directory
+
+- name: Mount the disk
+  mount:
+    path: /mnt/rpi_pinn
+    src: /dev/mmcblk0p1
+    fstype: vfat
+    opts: defaults
+    state: mounted
+
+- name: Enable ssh service
+  ansible.builtin.file:
+    path: /mnt/rpi_pinn/ssh
+    state: touch
+    mode: u=rw,g=r,o=r
+
+- name: Deploy wifi config file
+  template:
+    src: "templates/wpa_supplicant.conf"
+    dest: "/mnt/rpi_pinn/wpa_supplicant.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Unmount the disk
+  mount:
+    path: /mnt/rpi_pinn
+    state: unmounted
+
+- name: Remove the directory
+  file:
+    path: /mnt/rpi_pinn
+    state: absent
