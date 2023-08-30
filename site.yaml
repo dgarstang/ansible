@@ -4,6 +4,8 @@
   connection: ssh
   roles:
     - role: common
+      tags:
+        - common
     - role: raspberry_pi
     #- role: grafana
 
