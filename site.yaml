@@ -22,6 +22,7 @@
   connection: ssh
   roles:
     - role: k3s/node
+      tags: k3_node
 
 #- hosts: mgmt
   #become: true

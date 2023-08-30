@@ -7,10 +7,10 @@ node4
 [mgmt]
 node0
 
-#[k3s_master]
-#node1
+[k3s_master]
+node1
 
-#[k3s_node]
-#node2
-#node3
-#node4
+[k3s_node]
+node2
+node3
+node4

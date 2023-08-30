@@ -6,6 +6,6 @@ base_packages:
 mac_to_hostname:
   d83add439271: node0
   d83add2e5d3c: node1
-  d83add2349f4: mode2
+  d83add2349f4: node2
   d83add2367f4: node3
   d83add23617f: node4

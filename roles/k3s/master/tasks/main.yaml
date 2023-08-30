@@ -19,6 +19,15 @@
     backrefs: true
   notify: reboot
 
+- name: Reboot
+  reboot:
+    msg: "Reboot initiated by Ansible"
+    connect_timeout: 5
+    reboot_timeout: 600
+    pre_reboot_delay: 0
+    post_reboot_delay: 30
+    test_command: whoami
+
 - name: Copy K3s service file
   template:
     src: "k3s.service.j2"
@@ -52,6 +61,10 @@
   slurp:
     path: "{{ k3s_server_location }}/server/node-token"
   register: node_token
+
+- name: Print token
+  ansible.builtin.debug:
+    msg: "Token is {{ token }}"
 
 - name: Store Master node-token
   set_fact:
