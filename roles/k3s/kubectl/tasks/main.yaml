@@ -1,0 +1,32 @@
+- name: kubectl binary
+  get_url:
+    url: https://dl.k8s.io/release/v1.28.0/bin/linux/arm64/kubectl
+    dest: /usr/local/bin/kubectl
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Directory ~/.kube
+  file:
+    path: ~{{ ansible_user }}/.kube
+    state: directory
+    owner: "{{ ansible_user }}"
+    mode: "u=rwx,g=rx,o="
+
+- name: Copy a file
+  copy:
+    src: /etc/rancher/k3s/k3s.yaml
+    dest: ~{{ ansible_user }}/.kube/config.yaml
+    remote_src: yes
+
+- name: Set file permissions
+  file:
+    path: ~{{ ansible_user }}/.kube/config.yaml
+    mode: "0644"
+
+- name: Add environment variable to user's shell profile
+  lineinfile:
+    dest: "/home/{{ ansible_user }}/.bashrc"  # Replace with the appropriate shell profile file
+    line: "export KUBECONFIG=~/.kube/config.yaml"
+    state: present
+    insertafter: EOF

@@ -1,0 +1,16 @@
+---
+- name: Install vim-gui-common
+  apt:
+    name: vim-gui-common
+    state: present
+
+- name: Deploy vimrc file
+  template:
+    src: "vimrc"
+    dest: ~{{ ansible_user }}/.vimrc
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0644
+
+
+

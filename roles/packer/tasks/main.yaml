@@ -1,0 +1,17 @@
+- name: Install packages
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ packages }}"
+
+- name: Packer arm64  plugin
+  get_url:
+    url: https://github.com/solo-io/packer-plugin-arm-image/releases/download/v0.2.7/packer-plugin-arm-image_v0.2.7_x5.0_linux_amd64.zip
+    dest: /usr/local/bin/packer-builder-arm-image
+    owner: root
+    group: root
+    mode: 0755
+  when:
+    - ( ansible_facts.architecture is search("arm") and
+        ansible_facts.userspace_bits == "64" ) or
+      ansible_facts.architecture is search("aarch64")

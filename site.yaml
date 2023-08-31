@@ -9,6 +9,12 @@
     - role: raspberry_pi
     #- role: grafana
 
+- hosts: mgmt
+  become: true
+  connection: ssh
+  roles:
+    - role: vim
+
 - hosts: k3s_master
   become: true
   connection: ssh
@@ -16,6 +22,9 @@
     - role: k3s/master
       tags:
         - k3s_master
+    - role: k3s/kubectl
+      tags:
+        - kubectl
 
 - hosts: k3s_node
   become: true

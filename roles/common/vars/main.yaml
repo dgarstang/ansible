@@ -3,6 +3,7 @@ base_packages:
   - lm-sensors
   - curl
   - wget
+  - vim-gui-common
 mac_to_hostname:
   d83add439271: node0
   d83add2e5d3c: node1

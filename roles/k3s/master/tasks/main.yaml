@@ -37,7 +37,7 @@
     group: root
     mode: 0755
 
-- name: Enable and check K3s service
+- name: Enable K3s service
   systemd:
     name: k3s
     daemon_reload: yes
@@ -75,18 +75,3 @@
   file:
     path: "{{ k3s_server_location }}/server/node-token"
     mode: "{{ p.stat.mode }}"
-
-- name: Create directory .kube
-  file:
-    path: ~{{ ansible_user }}/.kube
-    state: directory
-    owner: "{{ ansible_user }}"
-    mode: "u=rwx,g=rx,o="
-
-- name: kubectl binary
-  get_url:
-    url: https://dl.k8s.io/release/v1.28.0/bin/linux/arm64/kubectl
-    dest: /usr/local/bin/kubectl
-    owner: root
-    group: root
-    mode: 0755
