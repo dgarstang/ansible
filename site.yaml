@@ -38,3 +38,11 @@
   #roles:
     #- role: monitoring 
     #- role: packer
+
+- hosts: nomad
+  become: true
+  connection: ssh
+  roles:
+    - role: nomad
+      tags: nomad
+
