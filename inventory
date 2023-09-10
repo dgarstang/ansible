@@ -16,7 +16,13 @@ node3
 node4
 
 [nomad]
+node0
 node1
 node2
 node3
 node4
+
+[nomad_server]
+node0
+node1
+node2

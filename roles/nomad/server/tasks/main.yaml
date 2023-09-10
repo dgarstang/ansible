@@ -1,0 +1,15 @@
+- name: Configuration directory
+  ansible.builtin.file:
+    path: /etc/nomad.d
+    state: directory
+
+- name: Server config file
+  template:
+    src: templates/server.hcl.j2
+    dest: /etc/nomad.d/server.hcl
+
+- name: Systemd unit file
+  template:
+    src: templates/nomad.service.j2  # Path to your template file
+    dest: /etc/systemd/system/nomad.service
+  notify: Reload systemd

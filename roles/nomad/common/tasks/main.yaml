@@ -7,14 +7,16 @@
     update_cache: yes
 
 - name: Download HashiCorp GPG key
-  get_url:
+  ansible.builtin.apt_key:
     url: https://apt.releases.hashicorp.com/gpg
-    dest: /usr/share/keyrings/hashicorp-archive-keyring.gpg
-    mode: 0644
+    state: present
   register: download_result
 
 - name: Add HashiCorp Linux repository
-  shell: echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list
+  ansible.builtin.apt_repository:
+    #repo: "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+    repo: "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com stretch main"
+    state: present
   when: download_result.changed  # Only add the repo if the key was downloaded/changed
 
 - name: Update apt cache

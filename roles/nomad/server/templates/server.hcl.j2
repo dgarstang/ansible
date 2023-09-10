@@ -1,0 +1,13 @@
+server {
+  enabled          = true
+  bootstrap_expect = 3
+  server_join {
+    retry_join = [
+      "node0",
+      "node1",
+      "node2",
+    ]
+    retry_max      = 0
+    retry_interval = "15s"
+  }
+}

@@ -39,10 +39,18 @@
     #- role: monitoring 
     #- role: packer
 
-- hosts: nomad
+- name: Apply Nomad common configuration
+  hosts: nomad_server, nomad_client
   become: true
   connection: ssh
   roles:
-    - role: nomad
+    - role: nomad/common
       tags: nomad
 
+- name: Apply Nomad server configuration
+  hosts: nomad_server
+  become: true
+  connection: ssh
+  roles:
+    - role: nomad/server
+      tags: nomad_server

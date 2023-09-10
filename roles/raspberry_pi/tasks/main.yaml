@@ -56,3 +56,9 @@
   file:
     path: /mnt/rpi_pinn
     state: absent
+
+- name: Apt ignore GPG checks - required for pi weirdness
+  template:
+    src: templates/apt.conf.99allow_unauth.j2
+    dest: /etc/apt/apt.conf.d/99allow_unauth
+
